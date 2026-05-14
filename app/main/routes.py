@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, abort
 from app.models import Announcement, Event, StudentResult
-# ... existing imports ...
-from flask import abort  # import abort for 404 handling
+
 
 main_bp = Blueprint('main', __name__)
 
@@ -96,12 +95,6 @@ def news_detail(news_id):
     return render_template('news_detail.html', news=news_item)
 
 
-# ... existing imports ...
-
-from flask import render_template
-
-
-# ... existing imports ...
 
 @main_bp.route('/departments/<string:dept_code>')
 def department_detail(dept_code):
