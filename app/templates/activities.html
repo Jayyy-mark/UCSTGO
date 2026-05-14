@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}News & Activities - UCSTGO{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="bg-white pt-32 pb-16 border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold text-apple-dark mb-6">News & Activities</h1>
+        <p class="text-xl text-gray-500 font-light">Stay updated with the latest announcements and campus events.</p>
+    </div>
+</section>
+
+<!-- 1. Latest Announcements Section -->
+<section class="py-24 bg-white min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        <!-- Grid of News Items -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in news_list %}
+            <div class="group flex flex-col h-full">
+
+                <!-- Image Card -->
+                <div class="relative h-64 overflow-hidden rounded-2xl shadow-sm group-hover:shadow-xl transition-all duration-300">
+                    <img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-white/90 backdrop-blur text-xs font-bold text-apple-blue uppercase tracking-wider px-3 py-1 rounded-full">
+                            {{ item.category }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="mb-3">
+                        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wider">{{ item.date }}</p>
+                        <h3 class="text-xl font-bold text-apple-dark leading-tight group-hover:text-apple-blue transition-colors">
+                            {{ item.title }}
+                        </h3>
+                    </div>
+
+                    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+                        {{ item.summary }}
+                    </p>
+
+                    <div class="mt-auto pt-4 border-t border-gray-100">
+                        <a href="/news/{{ item.id }}" class="inline-flex items-center text-sm font-semibold text-apple-blue hover:underline transition-colors">
+                            Read Full Story
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4-4m4 4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 2. Campus Activities / Events Section -->
+<section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-apple-dark mb-4">Campus Activities</h2>
+            <p class="text-gray-500">Tech fests, seminars, and student life.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Activity Card 1 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer">
+                <img src="https://picsum.photos/seed/techfest/600/800" alt="Tech Fest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
+                    <span class="text-apple-blue font-bold text-xs uppercase tracking-wider mb-2">Event</span>
+                    <h3 class="text-white text-2xl font-bold mb-2 group-hover:text-apple-blue transition-colors">UCSTGO Tech Fest 2024</h3>
+                    <p class="text-gray-300 text-sm mb-4">Showcasing the latest innovations from our student body.</p>
+                    <span class="text-white text-sm font-medium border-b border-apple-blue w-max group-hover:text-apple-blue transition-colors">View Details</span>
+                </div>
+            </div>
+
+            <!-- Activity Card 2 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer">
+                <img src="https://picsum.photos/seed/seminar/600/800" alt="Seminar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
+                    <span class="text-apple-blue font-bold text-xs uppercase tracking-wider mb-2">Seminar</span>
+                    <h3 class="text-white text-2xl font-bold mb-2 group-hover:text-apple-blue transition-colors">AI & Future Work</h3>
+                    <p class="text-gray-300 text-sm mb-4">Guest lecture by industry leaders on AI ethics.</p>
+                    <span class="text-white text-sm font-medium border-b border-apple-blue w-max group-hover:text-apple-blue transition-colors">View Details</span>
+                </div>
+            </div>
+
+            <!-- Activity Card 3 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer">
+                <img src="https://picsum.photos/seed/sports/600/800" alt="Sports" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
+                    <span class="text-apple-blue font-bold text-xs uppercase tracking-wider mb-2">Sports</span>
+                    <h3 class="text-white text-2xl font-bold mb-2 group-hover:text-apple-blue transition-colors">Inter-University Games</h3>
+                    <p class="text-gray-300 text-sm mb-4">Our athletes competing in the regional championships.</p>
+                    <span class="text-white text-sm font-medium border-b border-apple-blue w-max group-hover:text-apple-blue transition-colors">View Details</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-16 text-center">
+            <button class="px-8 py-3 bg-apple-dark text-white rounded-full font-medium hover:bg-black transition-colors shadow-lg">View All Events</button>
+        </div>
+    </div>
+</section>
+
+<!-- Subscribe Section (Design Element) -->
+<!--<section class="py-16 bg-apple-dark text-white">-->
+<!--    <div class="max-w-4xl mx-auto px-6 text-center">-->
+<!--        <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>-->
+<!--        <p class="text-gray-400 mb-8">Subscribe to our newsletter to receive the latest news directly to your inbox.</p>-->
+<!--        <form class="flex flex-col sm:flex-row justify-center gap-4">-->
+<!--            <input type="email" placeholder="Enter your email address" class="px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-apple-blue w-full sm:w-96">-->
+<!--            <button type="submit" class="px-8 py-4 bg-apple-blue rounded-full font-bold hover:bg-blue-600 transition-colors">Subscribe</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</section>-->
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Admin - Home Settings{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-apple-dark mb-8">Edit Home Page</h1>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-8">
+        
+        <!-- Hero Section -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">Hero Section</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Slogan</label>
+                    <input type="text" name="hero_slogan" value="{{ settings.hero_slogan }}" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-apple-blue">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Title</label>
+                    <input type="text" name="hero_title" value="{{ settings.hero_title }}" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-apple-blue">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Description</label>
+                    <textarea name="hero_desc" rows="3" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-apple-blue">{{ settings.hero_desc }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">Statistics</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Established</label>
+                    <input type="number" name="stat_established" value="{{ settings.stat_established }}" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Staff</label>
+                    <input type="number" name="stat_staff" value="{{ settings.stat_staff }}" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Graduated</label>
+                    <input type="number" name="stat_graduated" value="{{ settings.stat_graduated }}" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Students</label>
+                    <input type="number" name="stat_students" value="{{ settings.stat_students }}" class="w-full p-3 border rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Rector Section -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">Rector's Message</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Name</label>
+                    <input type="text" name="rector_name" value="{{ settings.rector_name }}" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">New Image</label>
+                    <input type="file" name="rector_image" class="w-full p-3 border rounded-lg">
+                    <p class="text-xs text-gray-500 mt-1">Current: {{ settings.rector_image }}</p>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Message</label>
+                    <textarea name="rector_message" rows="4" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-apple-blue">{{ settings.rector_message }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-apple-blue text-white font-bold py-4 rounded-xl hover:bg-blue-600 transition-colors">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UCSTGO{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        'apple-gray': '#f5f5f7',
+                        'apple-blue': '#0071e3',
+                        'apple-dark': '#1d1d1f',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #ffffff; color: #1d1d1f; overflow-x: hidden; }
+        html { scroll-behavior: smooth; }
+
+        /* Ensure 3D Canvas is strictly in background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind everything */
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9); /* Increased opacity for logo contrast */
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Typography Gradient */
+        .text-gradient {
+            background: -webkit-linear-gradient(45deg, #1d1d1f, #434344);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed w-full z-50 transition-all duration-300 border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+
+                <!-- ၁။ Logo & University Name (Link ထည့်လိုက်သည်) -->
+                <a href="/" class="flex-shrink-0 flex items-center cursor-pointer group gap-3">
+                    <img src="static/image/logo.png" alt="" class="h-8 w-auto rounded-full object-contain transition-transform duration-300 group-hover:scale-110">
+                    <span class="font-bold text-xl tracking-tight text-apple-dark">UCSTaungoo</span>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-1">
+                    <!-- ၂။ Home Dropdown (Button ကို နှိပ်ရင် Home ရောက်အောင် လုပ်သည်) -->
+                    <div class="relative group py-5">
+                        <button onclick="window.location.href='/'" class="flex items-center text-sm font-medium text-gray-900 group-hover:text-apple-blue transition-colors focus:outline-none">
+                            Home <svg class="ml-1 w-3 h-3 text-gray-500 group-hover:text-apple-blue transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute top-full left-0 w-64 bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 border border-gray-100 p-2">
+                            <a href="/about#history" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Background History</a>
+                            <a href="/about#vision" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Vision and Missions</a>
+                            <a href="/about#org-chart" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Organizational Chart</a>
+                        </div>
+                    </div>
+
+                    <!-- Academic -->
+                    <div class="relative group py-5">
+                        <button class="flex items-center text-sm font-medium text-gray-900 group-hover:text-apple-blue transition-colors focus:outline-none">
+                            Academic <svg class="ml-1 w-3 h-3 text-gray-500 group-hover:text-apple-blue transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute top-full left-0 w-64 bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 border border-gray-100 p-2">
+                            <a href="/academic#req" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Admission Requirement</a>
+                            <a href="/academic#syllabus" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Syllabus and Courses</a>
+                            <a href="/academic#degrees" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Degree Programmes</a>
+                            <a href="/lms" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Learning Management System</a>
+                        </div>
+                    </div>
+
+                    <!-- Find the "Facilities" <a href="#facilities"...> and replace it with this: -->
+
+                    <!-- 8. Faculties (Dropdown) -->
+                    <!-- Departments (NEW: 9 Department Dropdown) -->
+                    <div class="relative group py-5">
+                        <button class="flex items-center text-sm font-medium text-gray-900 group-hover:text-apple-blue transition-colors focus:outline-none">
+                            Faculties
+                            <svg class="ml-1 w-3 h-3 text-gray-500 group-hover:text-apple-blue transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute top-full left-0 w-64 bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 border border-gray-100 p-2 z-50">
+                            <!-- The 9 Departments -->
+                            <a href="/departments/cs" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Computer Science (CS)</a>
+                            <a href="/departments/is" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Information Systems (IS)</a>
+                            <a href="/departments/se" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Software Engineering (SE)</a>
+                            <a href="/departments/nce" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Network Engineering (NCE)</a>
+                            <a href="/departments/csec" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Cyber Security (CSec)</a>
+                            <a href="/departments/ai" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Artificial Intelligence</a>
+                            <a href="/departments/es" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Embedded Systems</a>
+                            <a href="/departments/rnd" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Research & Development</a>
+                            <a href="/departments/math" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Mathematics & Physics</a>
+                        </div>
+                    </div>
+                    <!-- Admission -->
+                    <div class="relative group py-5">
+                        <button class="flex items-center text-sm font-medium text-gray-900 group-hover:text-apple-blue transition-colors focus:outline-none">
+                            Admission <svg class="ml-1 w-3 h-3 text-gray-500 group-hover:text-apple-blue transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="absolute top-full left-0 w-64 bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 border border-gray-100 p-2">
+                            <a href="/admission#entrance" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Entrance Info</a>
+                            <a href="/admission#list" class="block px-4 py-3 text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-apple-blue">Admitted List</a>
+                        </div>
+                    </div>
+
+                    <a href="/activities" class="px-3 py-5 text-sm font-medium text-gray-900 hover:text-apple-blue transition-colors">News and Activities</a>
+                    <a href="/research" class="px-3 py-5 text-sm font-medium text-gray-900 hover:text-apple-blue transition-colors">Research Publications</a>
+                    <a href="#online-learning" class="px-3 py-5 text-sm font-medium text-gray-900 hover:text-apple-blue transition-colors">Online Learning</a>
+                    <a href="/library" class="px-3 py-5 text-sm font-medium text-gray-900 hover:text-apple-blue transition-colors">Library</a>
+                </div>
+
+                <div class="hidden md:flex items-center">
+                    <a href="/" class="text-xs font-medium text-gray-500 border border-gray-300 px-4 py-2 rounded-full hover:border-gray-900 hover:text-gray-900 transition-all">Alumni Result</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow ">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8 mt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <span class="font-bold text-xl tracking-tight text-apple-dark">UCSTGO</span>
+                    <p class="mt-4 text-sm text-gray-500">University of Computer Studies, Taungoo. Dedicated to excellence in technology education.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-4">Academics</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-apple-blue">Undergraduate</a></li>
+                        <li><a href="#" class="hover:text-apple-blue">Postgraduate</a></li>
+                        <li><a href="#" class="hover:text-apple-blue">Research</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-4">About</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-apple-blue">History</a></li>
+                        <li><a href="#" class="hover:text-apple-blue">Leadership</a></li>
+                        <li><a href="#" class="hover:text-apple-blue">Campus Map</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li>Taungoo, Bago Region, Myanmar</li>
+                        <li>contact@ucstgo.edu.mm</li>
+                        <li>+95 9 123 456 789</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-blue-100 pt-8 text-center">
+                <p class="text-xs text-gray-400">&copy; 2026 UCSTGO. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Scripts -->
+    <script>
+        // Placeholder for global functions
+        function openModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = src;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+    {% block styles %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>
