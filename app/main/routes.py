@@ -1,6 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, abort
-from app.models import Announcement, Event, StudentResult
-
+from flask import Blueprint, render_template, abort
 
 main_bp = Blueprint('main', __name__)
 
@@ -8,9 +6,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     """Home page"""
-    announcements = Announcement.query.filter_by(is_active=True).order_by(Announcement.date_posted.desc()).limit(
-        3).all()
-    return render_template('index.html', announcements=announcements)
+    return render_template('index.html')
 
 @main_bp.route('/gallery-page')
 def gallery_page():
@@ -225,14 +221,14 @@ def activity_detail(activity_id):
 
     return render_template('activity_gallery.html', activity=activity)
 
-@main_bp.route('/api/check-result', methods=['POST'])
-def check_result():
-    """API Endpoint for Alumni Checker"""
-    roll_no = request.form.get('rollNo')
-    student = StudentResult.query.filter_by(roll_no=roll_no).first()
+# @main_bp.route('/api/check-result', methods=['POST'])
+# def check_result():
+#     """API Endpoint for Alumni Checker"""
+#     roll_no = request.form.get('rollNo')
+#     student = StudentResult.query.filter_by(roll_no=roll_no).first()
 
-    if student:
-        return jsonify({'status': 'success', 'data': student.to_dict()})
-    else:
-        return jsonify({'status': 'error', 'message': 'Record not found'}), 404
+#     if student:
+#         return jsonify({'status': 'success', 'data': student.to_dict()})
+#     else:
+#         return jsonify({'status': 'error', 'message': 'Record not found'}), 404
 
