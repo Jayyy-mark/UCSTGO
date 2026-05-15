@@ -12,13 +12,6 @@ def create_app(config_name):
     # Load config
     app.config.from_object(config_by_name[config_name])
 
-    # Import db here, now that we are inside a function
-    from app.models import db
-    migrate = Migrate(app, db)
-
-    # Initialize extensions
-    db.init_app(app)
-    migrate.init_app(app, db)
 
     # Register Blueprints
     from app.main import main_bp
