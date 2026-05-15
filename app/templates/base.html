@@ -110,7 +110,7 @@
                 <!-- Logo -->
                 <a href="/" class="flex-shrink-0 flex items-center cursor-pointer group gap-3">
 
-                    <img src="static/image/logo.png" alt=""
+                    <img src="{{ url_for('static', filename='image/logo.png') }}" alt=""
                         class="h-8 w-auto rounded-full object-contain transition-transform duration-300 group-hover:scale-110">
 
                     <span class="font-bold text-xl tracking-tight text-apple-dark">
@@ -532,7 +532,6 @@
                 </div>
 
             </div>
-
             <!-- SIMPLE LINK -->
             <a href="/activities"
                 class="block text-center text-sm font-medium text-gray-700 border border-gray-300 px-4 py-4 rounded-2xl hover:border-black hover:text-black transition">
