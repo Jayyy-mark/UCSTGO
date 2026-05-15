@@ -93,6 +93,33 @@
         #mobile-menu {
             transition: transform 0.3s ease;
         }
+
+        .mobile-drawer-view {
+            position: absolute;
+            top: 65px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 65px);
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(24px);
+            transition: transform 0.28s ease, opacity 0.22s ease;
+        }
+
+        .mobile-drawer-view.is-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        #mainView.mobile-drawer-view {
+            transform: translateX(-24px);
+        }
+
+        #mainView.mobile-drawer-view.is-active {
+            transform: translateX(0);
+        }
     </style>
 </head>
 
@@ -392,7 +419,8 @@
                 </div>
 
                 <!-- Mobile Button -->
-                <button id="menu-btn"
+                <button id="menu-btn" type="button" aria-label="Open menu" aria-controls="mobile-menu"
+                    aria-expanded="false"
                     class="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300">
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
@@ -414,136 +442,194 @@
 
 
     </nav>
-    <!-- BACKDROP -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black/40 z-40 hidden opacity-0 transition-opacity duration-300"
-        onclick="closeDrawer()">
+    <!-- Mobile Menu Overlay -->
+    <div id="overlay" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onclick="closeDrawer()">
     </div>
 
-    <!-- MOBILE DRAWER -->
-    <div id="mobile-menu" class="fixed  top-0 right-0 h-full w-[320px] max-w-full bg-white z-50 shadow-2xl
-                translate-x-full transition-transform duration-300 overflow-y-auto">
+    <!-- DRAWER -->
+    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-[340px] max-w-full z-50
+           bg-white/95 backdrop-blur-2xl
+           translate-x-full transition-transform duration-300 overflow-hidden">
 
         <!-- HEADER -->
-        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-blue-400">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
 
-            <h2 class="text-lg font-bold text-white">
+            <!-- BACK BUTTON (hidden on main screen) -->
+            <button id="backBtn" type="button" onclick="showMain()"
+                class="hidden text-sm text-black active:opacity-60 transition">
+                Back
+            </button>
+
+            <h2 class="text-lg font-semibold text-black">
                 Menu
             </h2>
 
-            <button onclick="closeDrawer()"
-                class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+            <button type="button" onclick="closeDrawer()" aria-label="Close menu"
+                class="w-10 h-10 flex items-center justify-center rounded-full active:scale-95 transition">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+                <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-
                 </svg>
+            </button>
+        </div>
 
+        <!-- MAIN VIEW -->
+        <div id="mainView" class="mobile-drawer-view is-active py-4">
+
+            <p class="px-6 text-xs text-gray-400 uppercase tracking-wider mb-2">
+                Main Menu
+            </p>
+
+            <button type="button" onclick="openSub('home')"
+                class="w-full text-left px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Home
             </button>
 
-        </div>
+            <button type="button" onclick="openSub('academic')"
+                class="w-full text-left px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Academic
+            </button>
 
-        <!-- CONTENT -->
-        <div class="px-6 py-5 space-y-4">
+            <button type="button" onclick="openSub('faculties')"
+                class="w-full text-left px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Faculties
+            </button>
 
-            <!-- HOME -->
-            <div class="border-2 border-blue-400 rounded-2xl overflow-hidden bg-blue-400">
+            <button type="button" onclick="openSub('admission')"
+                class="w-full text-left px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Admission
+            </button>
 
-                <button onclick="toggleDropdown('home-dropdown', 'home-icon')"
-                    class="w-full flex items-center justify-between px-4 py-4 bg-gray-50 text-sm font-semibold text-gray-800">
-
-                    Home
-
-                    <svg id="home-icon" class="w-4 h-4 transition-transform duration-300" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-
-                    </svg>
-
-                </button>
-
-                <div id="home-dropdown" class="hidden px-4 py-3 space-y-3 bg-white max-h-0 overflow-hidden">
-
-                    <a href="/" class="block text-sm text-gray-600 hover:text-blue-600">
-                        Main Home
-                    </a>
-
-                    <a href="/about#history" class="block text-sm text-gray-600 hover:text-blue-600">
-                        Background History
-                    </a>
-                    <a href="/about#vision"
-                        class="block text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600">
-
-                        Vision and Missions
-
-                    </a>
-
-                    <a href="/about#org-chart"
-                        class="block text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600">
-
-                        Organizational Chart
-
-                    </a>
-                </div>
-
-            </div>
-
-            <!-- ACADEMIC -->
-            <div class="border-2 border-blue-400 rounded-2xl overflow-hidden bg-blue-400">
-
-                <button onclick="toggleDropdown('academic-dropdown', 'academic-icon')"
-                    class="w-full flex items-center justify-between px-4 py-4 bg-gray-50 text-sm font-semibold text-gray-800">
-
-                    Academic
-
-                    <svg id="academic-icon" class="w-4 h-4 transition-transform duration-300" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-
-                    </svg>
-
-                </button>
-
-                <div id="academic-dropdown" class="hidden px-4 py-3 space-y-3 bg-white">
-
-                    <a href="/academic#req" class="block text-sm text-gray-600 hover:text-blue-600">
-                        Admission Requirement
-                    </a>
-
-                    <a href="/academic#syllabus" class="block text-sm text-gray-600 hover:text-blue-600">
-                        Syllabus and Courses
-                    </a>
-                            <a href="/academic#degrees"
-                                class="block text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600">
-
-                                Degree Programmes
-
-                            </a>
-
-                            <a href="/lms"
-                                class="block text-sm text-gray-700 rounded-xl hover:bg-gray-50 hover:text-blue-600">
-
-                                Learning Management System
-
-                            </a>
-                </div>
-
-            </div>
-            <!-- SIMPLE LINK -->
-            <a href="/activities"
-                class="block text-center text-sm font-medium text-gray-700 border border-gray-300 px-4 py-4 rounded-2xl hover:border-black hover:text-black transition">
-
-                News and Activities
-
+            <a href="/activities" class="block px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                News & Activities
             </a>
 
+            <a href="/research" class="block px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Research Publications
+            </a>
+
+            <a href="#online-learning" class="block px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Online Learning
+            </a>
+
+            <a href="/library" class="block px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Library
+            </a>
+
+            <a href="/" class="block px-6 py-4 text-[15px] text-black active:bg-gray-100">
+                Alumni Result
+            </a>
         </div>
 
-    </div>
+        <!-- HOME SUB VIEW -->
+        <div id="homeView" class="mobile-drawer-view py-4" aria-hidden="true">
 
+            <p class="px-6 text-xs text-gray-400 uppercase tracking-wider mb-2">
+                Home
+            </p>
+
+            <a href="/" class="block px-6 py-4 text-black active:bg-gray-100">
+                Main Home
+            </a>
+
+            <a href="/about#history" class="block px-6 py-4 text-black active:bg-gray-100">
+                Background History
+            </a>
+
+            <a href="/about#vision" class="block px-6 py-4 text-black active:bg-gray-100">
+                Vision & Mission
+            </a>
+
+            <a href="/about#org-chart" class="block px-6 py-4 text-black active:bg-gray-100">
+                Organizational Chart
+            </a>
+        </div>
+
+        <!-- ACADEMIC SUB VIEW -->
+        <div id="academicView" class="mobile-drawer-view py-4" aria-hidden="true">
+
+            <p class="px-6 text-xs text-gray-400 uppercase tracking-wider mb-2">
+                Academic
+            </p>
+
+            <a href="/academic#req" class="block px-6 py-4 text-black active:bg-gray-100">
+                Admission Requirement
+            </a>
+
+            <a href="/academic#syllabus" class="block px-6 py-4 text-black active:bg-gray-100">
+                Syllabus & Courses
+            </a>
+
+            <a href="/academic#degrees" class="block px-6 py-4 text-black active:bg-gray-100">
+                Degree Programmes
+            </a>
+
+            <a href="/lms" class="block px-6 py-4 text-black active:bg-gray-100">
+                LMS Portal
+            </a>
+        </div>
+
+        <!-- FACULTIES SUB VIEW -->
+        <div id="facultiesView" class="mobile-drawer-view py-4" aria-hidden="true">
+
+            <p class="px-6 text-xs text-gray-400 uppercase tracking-wider mb-2">
+                Faculties
+            </p>
+
+            <a href="/departments/cs" class="block px-6 py-4 text-black active:bg-gray-100">
+                Computer Science (CS)
+            </a>
+
+            <a href="/departments/is" class="block px-6 py-4 text-black active:bg-gray-100">
+                Information Systems (IS)
+            </a>
+
+            <a href="/departments/se" class="block px-6 py-4 text-black active:bg-gray-100">
+                Software Engineering (SE)
+            </a>
+
+            <a href="/departments/nce" class="block px-6 py-4 text-black active:bg-gray-100">
+                Network Engineering (NCE)
+            </a>
+
+            <a href="/departments/csec" class="block px-6 py-4 text-black active:bg-gray-100">
+                Cyber Security (CSec)
+            </a>
+
+            <a href="/departments/ai" class="block px-6 py-4 text-black active:bg-gray-100">
+                Artificial Intelligence
+            </a>
+
+            <a href="/departments/es" class="block px-6 py-4 text-black active:bg-gray-100">
+                Embedded Systems
+            </a>
+
+            <a href="/departments/rnd" class="block px-6 py-4 text-black active:bg-gray-100">
+                Research & Development
+            </a>
+
+            <a href="/departments/math" class="block px-6 py-4 text-black active:bg-gray-100">
+                Mathematics & Physics
+            </a>
+        </div>
+
+        <!-- ADMISSION SUB VIEW -->
+        <div id="admissionView" class="mobile-drawer-view py-4" aria-hidden="true">
+
+            <p class="px-6 text-xs text-gray-400 uppercase tracking-wider mb-2">
+                Admission
+            </p>
+
+            <a href="/admission#entrance" class="block px-6 py-4 text-black active:bg-gray-100">
+                Entrance Info
+            </a>
+
+            <a href="/admission#list" class="block px-6 py-4 text-black active:bg-gray-100">
+                Admitted List
+            </a>
+        </div>
+    </div>
 
 
     <!-- Main Content -->
@@ -595,122 +681,79 @@
     <script>
 
         //<!-- Mobile Menu Script -->
-        /* =========================
-           ELEMENTS
-        ========================= */
         const menuBtn = document.getElementById("menu-btn");
         const drawer = document.getElementById("mobile-menu");
-        const overlay = document.getElementById("mobile-overlay");
-        const body = document.body;
+        const overlay = document.getElementById("overlay");
 
-        /* =========================
-           OPEN / CLOSE DRAWER
-        ========================= */
+        const mainView = document.getElementById("mainView");
+        const homeView = document.getElementById("homeView");
+        const academicView = document.getElementById("academicView");
+        const facultiesView = document.getElementById("facultiesView");
+        const admissionView = document.getElementById("admissionView");
+        const backBtn = document.getElementById("backBtn");
+        const subViews = {
+            home: homeView,
+            academic: academicView,
+            faculties: facultiesView,
+            admission: admissionView
+        };
+
         function openDrawer() {
             drawer.classList.remove("translate-x-full");
             overlay.classList.remove("hidden");
-
-            setTimeout(() => {
-                overlay.classList.remove("opacity-0");
-            }, 10);
-
-            // lock scroll
-            body.style.overflow = "hidden";
+            document.body.classList.add("overflow-hidden");
+            menuBtn.setAttribute("aria-expanded", "true");
+            showMain();
         }
 
         function closeDrawer() {
             drawer.classList.add("translate-x-full");
-            overlay.classList.add("opacity-0");
-
-            setTimeout(() => {
-                overlay.classList.add("hidden");
-            }, 300);
-
-            // unlock scroll
-            body.style.overflow = "";
+            overlay.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+            menuBtn.setAttribute("aria-expanded", "false");
         }
 
-        /* menu button */
+        function showMain() {
+            mainView.classList.add("is-active");
+            mainView.setAttribute("aria-hidden", "false");
+            Object.values(subViews).forEach(function (view) {
+                view.classList.remove("is-active");
+                view.setAttribute("aria-hidden", "true");
+            });
+            backBtn.classList.add("hidden");
+        }
+
+        function openSub(type) {
+            if (!subViews[type]) {
+                return;
+            }
+
+            mainView.classList.remove("is-active");
+            mainView.setAttribute("aria-hidden", "true");
+            Object.keys(subViews).forEach(function (key) {
+                const isActive = key === type;
+                subViews[key].classList.toggle("is-active", isActive);
+                subViews[key].setAttribute("aria-hidden", String(!isActive));
+            });
+            backBtn.classList.remove("hidden");
+        }
+
         menuBtn.addEventListener("click", openDrawer);
 
-        /* overlay click */
-        overlay.addEventListener("click", closeDrawer);
+        drawer.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", closeDrawer);
+        });
 
-        /* =========================
-           AUTO CLOSE ON LINK CLICK
-        ========================= */
-        drawer.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => {
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
                 closeDrawer();
-            });
-        });
-
-        /* =========================
-           SMOOTH ACCORDION (NO JUMP)
-        ========================= */
-        function toggleDropdown(id, iconId) {
-            const dropdown = document.getElementById(id);
-            const icon = document.getElementById(iconId);
-
-            console.log("this is classlist before toggle", dropdown.classList);
-            if (dropdown.classList.contains("max-h-0")) {
-                dropdown.classList.remove("max-h-0");
-                dropdown.classList.remove("hidden");
-                dropdown.classList.add("max-h-[500px]");
-            } else {
-                dropdown.classList.add("max-h-0");
-                dropdown.classList.add("hidden");
-                dropdown.classList.remove("max-h-[500px]");
-            }
-
-            icon.classList.toggle("rotate-180");
-        }
-        /* init dropdown smooth styles */
-        document.querySelectorAll("#mobile-menu > div > div[id$='-dropdown']").forEach(el => {
-            el.style.overflow = "hidden";
-            el.style.maxHeight = null;
-            el.style.transition = "max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease";
-            el.style.opacity = "0";
-            el.style.transform = "translateY(-5px)";
-        });
-
-        /* =========================
-           SWIPE TO CLOSE (ANDROID STYLE)
-        ========================= */
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
-
-        drawer.addEventListener("touchstart", (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        });
-
-        drawer.addEventListener("touchmove", (e) => {
-            if (!isDragging) return;
-
-            currentX = e.touches[0].clientX;
-            let diff = currentX - startX;
-
-            // only allow swipe right to close
-            if (diff > 0) {
-                drawer.style.transform = `translateX(${diff}px)`;
             }
         });
 
-        drawer.addEventListener("touchend", () => {
-            isDragging = false;
-
-            let diff = currentX - startX;
-
-            if (diff > 100) {
-                closeDrawer(); // swipe threshold
-            } else {
-                drawer.style.transform = "";
+        window.addEventListener("resize", function () {
+            if (window.innerWidth >= 1024) {
+                closeDrawer();
             }
-
-            startX = 0;
-            currentX = 0;
         });
         // Placeholder for global functions
         function openModal(src) {
